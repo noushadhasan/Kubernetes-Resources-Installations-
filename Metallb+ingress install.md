@@ -4,15 +4,16 @@ This guide explains how to install **MetalLB** (for bare-metal LoadBalancer supp
 
 ---
 
-## 🔧 Prerequisites
+## Prerequisites
 - A running [k3s](https://k3s.io/) cluster installed **without Traefik**:
-  ```bash
+```bash
   curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable traefik" sh -
 ```
 
 - kubectl configured and pointing to your cluster.
 - A range of unused IPs in your LAN/VM network (e.g., 192.168.1.100-192.168.1.120)
-## Install MetalLB
+
+# Install MetalLB
 ```bash
 kubectl create namespace metallb-system
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
