@@ -1,6 +1,6 @@
 # Install Kubectl reach plugin 
 ## Run the following command in terminal 
-*Step 1: Install krew (one-time setup)
+* Step 1: Install krew (one-time setup)
 ```bash
 (
   set -x
@@ -12,7 +12,7 @@
   ./krew-${OS}_${ARCH} install krew
 )
 ```
-*Step 2: Add krew to PATH (important!)
+* Step 2: Add krew to PATH (important!)
 ```bash
     export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 ```
