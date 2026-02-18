@@ -43,6 +43,11 @@ Apply it:
 ```bash
 kubectl apply -f metallb-config.yaml
 ```
+# Install Helm
+```bash
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+helm version
+```
 # Install NGINX Ingress Controller
 Add the Helm repo and install ingress-nginx:
 ```bash
