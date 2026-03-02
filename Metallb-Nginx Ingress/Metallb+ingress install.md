@@ -53,8 +53,10 @@ Add the Helm repo and install ingress-nginx:
 ```bash
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
+```
+```bash
+helm install ibosio-ingress ingress-nginx/ingress-nginx --namespace default --set controller.publishService.enabled=true --set controller.ingressClassResource.name=ibosio-ingress --set controller.ingressClass=ibosio-ingress --set controller.ingressClassResource.controllerValue=k8s.io/ibosio-ingress --set controller.admissionWebhooks.enabled=false
 
-helm install ibosio-ingress ingress-nginx/ingress-nginx   --namespace default   --set controller.publishService.enabled=true   --set controller.ingressClassResource.name=ibosio-ingress   --set controller.ingressClass=ibosio-ingress   --set controller.ingressClassResource.controllerValue=k8s.io/ibosio-ingress --set controller.admissionWebhooks.enabled=false
 ```
 chech the service:
 ```bash
