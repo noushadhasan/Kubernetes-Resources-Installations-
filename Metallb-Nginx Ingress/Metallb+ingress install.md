@@ -54,17 +54,10 @@ Add the Helm repo and install ingress-nginx:
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 
-kubectl create namespace ingress-nginx
-
-helm install ibosio-ingress ingress-nginx/ingress-nginx \
-  --namespace default \
-  --set controller.publishService.enabled=true \
-  --set controller.ingressClassResource.name=ibosio-ingress \
-  --set controller.ingressClass=ibosio-ingress \
-  --set controller.ingressClassResource.controllerValue=k8s.io/ibosio-ingress
+helm install ibosio-ingress ingress-nginx/ingress-nginx   --namespace default   --set controller.publishService.enabled=true   --set controller.ingressClassResource.name=ibosio-ingress   --set controller.ingressClass=ibosio-ingress   --set controller.ingressClassResource.controllerValue=k8s.io/ibosio-ingress --set controller.admissionWebhooks.enabled=false
 ```
 chech the service:
 ```bash
-kubectl get svc -n ingress-nginx
+kubectl get svc
 ```
 You should see an EXTERNAL-IP assigned by MetalLB.
