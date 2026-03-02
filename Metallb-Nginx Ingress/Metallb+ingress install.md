@@ -56,9 +56,12 @@ helm repo update
 
 kubectl create namespace ingress-nginx
 
-helm install ingress-nginx ingress-nginx/ingress-nginx \
-  --namespace ingress-nginx \
-  --set controller.publishService.enabled=true
+helm install ibosio-ingress ingress-nginx/ingress-nginx \
+  --namespace default \
+  --set controller.publishService.enabled=true \
+  --set controller.ingressClassResource.name=ibosio-ingress \
+  --set controller.ingressClass=ibosio-ingress \
+  --set controller.ingressClassResource.controllerValue=k8s.io/ibosio-ingress
 ```
 chech the service:
 ```bash
