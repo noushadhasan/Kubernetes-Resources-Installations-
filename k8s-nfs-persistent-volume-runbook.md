@@ -52,6 +52,7 @@ Naming convention: `<app-name>-appdata-pv` / `<app-name>-appdata-pvc`.
    ```bash
    sudo exportfs -v         # verify
    ```
+   ```bash
    sudo systemctl status nfs-server
    showmount -e localhost
    ```
