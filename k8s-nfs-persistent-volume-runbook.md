@@ -35,6 +35,11 @@ Naming convention: `<app-name>-appdata-pv` / `<app-name>-appdata-pvc`.
    ```bash
    sudo mkdir -p /data/test-api/app_data
    ```
+  Set Permissions:
+  ```bash
+  sudo chown nobody:nogroup /data/test-api/app_data
+  sudo chmod 777 /data/test-api/app_data
+  ```
 3. Add to `/etc/exports` (adjust CIDR to the cluster node network):
    ```
    /data/test-api/app_data  *(rw,sync,no_subtree_check,no_root_squash)
@@ -42,7 +47,11 @@ Naming convention: `<app-name>-appdata-pv` / `<app-name>-appdata-pvc`.
    `no_root_squash` is required because the container runs as root.
 4. Apply exports and verify:
    ```bash
-   sudo exportfs -ra
+   sudo exportfs -ra        #apply
+   ```
+   ```bash
+   sudo exportfs -v         # verify
+   ```
    sudo systemctl status nfs-server
    showmount -e localhost
    ```
