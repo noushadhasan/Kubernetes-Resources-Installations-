@@ -159,7 +159,7 @@ spec:
     spec:
       containers:
       - name:  #{Deployment}#
-        image: iboslimitedbd/#{Deployment}#:#{Build.BuildId}#
+        image: noushad/#{Deployment}#:#{Build.BuildId}#
         resources:
           requests:
             cpu: "250m"
@@ -172,12 +172,6 @@ spec:
           value: #{AppEnvValue}#
         - name:  "ConnectionString"
           value:  #{ConnectionString}#
-        - name: "REACT_APP_KEY_NAME"
-          value: #{REACT_APP_KEY_NAME}#
-        - name:  "REACT_APP_IV_NAME"
-          value:  #{REACT_APP_IV_NAME}#
-        - name:  "REACT_APP_SECRET_NAME"
-          value:  #{REACT_APP_SECRET_NAME}#
         volumeMounts:
         - name: appdata
           mountPath: /app/App_Data
