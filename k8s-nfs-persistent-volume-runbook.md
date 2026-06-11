@@ -91,10 +91,10 @@ Save as `<app-name>-pv-pvc.yaml` and apply with `kubectl apply -f <file>`:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: <app-name>-appdata-pv
+  name: test-api-appdata-pv
 spec:
   capacity:
-    storage: 10Gi
+    storage: 5Gi
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
@@ -113,7 +113,7 @@ spec:
   storageClassName: ""          # must be empty string to bind static PV
   resources:
     requests:
-      storage: 10Gi
+      storage: 5Gi
   volumeName: test-api-appdata-pv
 ```
 
