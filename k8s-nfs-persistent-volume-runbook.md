@@ -2,14 +2,14 @@
 
 **Purpose:** Persist application data (e.g., uploaded files in `/app/App_Data`) across pod restarts, redeployments, and rescheduling, so data is not lost when a new pod replaces an old one.
 
-**Example used throughout:** `rdms-api` in namespace `staging`, NFS server `10.209.99.21`.
+**Example used throughout:** `test-api` in namespace `staging`, NFS server `10.200.90.211`.
 
 ---
 
 ## 1. Architecture Overview
 
 ```
-Azure Pipeline → Deployment (pod) → PVC → PV → NFS Server (10.209.99.21)
+Azure Pipeline → Deployment (pod) → PVC → PV → NFS Server (10.200.90.211)
                                                   └── /data/<app-name>/app_data
 ```
 
@@ -25,7 +25,7 @@ Naming convention: `<app-name>-appdata-pv` / `<app-name>-appdata-pvc`.
 
 ## 2. Prerequisites
 
-### 2.1 NFS Server side (10.209.99.21)
+### 2.1 NFS Server side (10.200.90.211)
 
 1. Install NFS server (Ubuntu):
    ```bash
@@ -33,11 +33,11 @@ Naming convention: `<app-name>-appdata-pv` / `<app-name>-appdata-pvc`.
    ```
 2. Create the export directory:
    ```bash
-   sudo mkdir -p /data/<app-name>/app_data
+   sudo mkdir -p /data/test-api/app_data
    ```
 3. Add to `/etc/exports` (adjust CIDR to the cluster node network):
    ```
-   /data/<app-name>/app_data  10.209.0.0/16(rw,sync,no_subtree_check,no_root_squash)
+   /data/test-api/app_data  *(rw,sync,no_subtree_check,no_root_squash)
    ```
    `no_root_squash` is required because the container runs as root.
 4. Apply exports and verify:
@@ -58,17 +58,14 @@ Install on each node:
 ```bash
 # Ubuntu/Debian
 sudo apt-get update && sudo apt-get install -y nfs-common
-
-# RHEL/CentOS/Rocky
-sudo yum install -y nfs-utils
 ```
 
 Verify from a node before deploying:
 
 ```bash
-showmount -e 10.209.99.21
+showmount -e 10.200.90.211
 sudo mkdir -p /mnt/nfstest
-sudo mount -t nfs 10.209.99.21:/data/<app-name>/app_data /mnt/nfstest
+sudo mount -t nfs 10.200.90.211:/data/test-api/app_data /mnt/nfstest
 ls /mnt/nfstest && sudo umount /mnt/nfstest
 ```
 
@@ -92,13 +89,13 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: 10.209.99.21
-    path: /data/<app-name>/app_data
+    server: 10.200.90.211
+    path: /data/test-api/app_data
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: <app-name>-appdata-pvc
+  name: test-api-appdata-pvc
   namespace: staging
 spec:
   accessModes:
@@ -107,7 +104,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  volumeName: <app-name>-appdata-pv
+  volumeName: test-api-appdata-pv
 ```
 
 Key points:
@@ -118,8 +115,8 @@ Key points:
 Verify binding:
 
 ```bash
-kubectl get pv <app-name>-appdata-pv
-kubectl get pvc <app-name>-appdata-pvc -n staging
+kubectl get pv test-api-appdata-pv
+kubectl get pvc test-api-appdata-pvc -n staging
 # STATUS should be "Bound" for both
 ```
 
