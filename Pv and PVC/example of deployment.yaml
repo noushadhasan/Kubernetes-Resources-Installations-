@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #{Deployment}#
+
+spec:
+  replicas: 1
+
+  strategy:
+    type: Recreate
+
+  revisionHistoryLimit: 10
+
+  selector:
+    matchLabels:
+      app: #{Deployment}#
+
+  template:
+    metadata:
+      labels:
+        app: #{Deployment}#
+        type: #{Deployment}#
+
+    spec:
+      containers:
+        - name: #{Deployment}#
+          image: iboslimitedbd/#{Deployment}#:#{Build.BuildId}#
+
+          env:
+          - name: "ACCESS_TOKEN_TTL_SECS"
+            value: #{ACCESS_TOKEN_TTL_SECS}#
+
+          - name: "JWT_SECRET"
+            value: #{JWT_SECRET}#
+
+          - name: "REFRESH_TOKEN_TTL_SECS"
+            value: #{REFRESH_TOKEN_TTL_SECS}#
+
+          - name: "DATABASE_URL"
+            value: #{DATABASE_URL}#
+
+          - name: "UPLOAD_DIR"
+            value: #{UPLOAD_DIR}#
+
+          - name: "SUPERADMIN_TOKEN"
+            value: #{SUPERADMIN_TOKEN}#
+
+          - name: "USERS_PAGE_SIZE"
+            value: #{USERS_PAGE_SIZE}#
+
+          - name: "CHAT_ORG_ID"
+            value: #{CHAT_ORG_ID}#
+
+          - name: "TICKETS_PAGE_SIZE"
+            value: #{TICKETS_PAGE_SIZE}#
+
+          - name: "SERVER_HOST"
+            value: #{SERVER_HOST}#
+
+          - name: "SERVER_PORT"
+            value: #{SERVER_PORT}#
+
+          - name: "RUST_LOG"
+            value: #{RUST_LOG}#
+
+          - name: "SUPERADMIN_EMAIL"
+            value: #{SUPERADMIN_EMAIL}#
+
+          - name: "SUPERADMIN_PASSWORD_HASH"
+            value: #{SUPERADMIN_PASSWORD_HASH}#
+
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+#inside container
+          volumeMounts:
+            - name: deskbird-logs
+              mountPath: /app/logs
+
+          # resources:
+          #   requests:
+          #     cpu: "10m"
+          #     memory: "2Gi"
+          #   limits:
+          #     cpu: "3000m"
+          #     memory: "25Gi"
+#using pvc claim name to mount container path to pvc
+      volumes:
+        - name: deskbird-logs
+          persistentVolumeClaim:
+            claimName: deskbird-api-logs-pvc
+
+      imagePullSecrets:
+        - name: dockercred
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #{Deployment}#
+
+spec:
+  selector:
+    app: #{Deployment}#
+
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+      protocol: TCP

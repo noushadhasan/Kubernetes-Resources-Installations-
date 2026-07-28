@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: deskbird-api-logs-pv
+spec:
+  capacity:
+    storage: 5Gi
+
+  volumeMode: Filesystem
+
+  accessModes:
+    - ReadWriteOnce
+
+  persistentVolumeReclaimPolicy: Retain
+
+  storageClassName: local-storage
+
+  local:
+    path: /var/lib/deskbird-api/logs
+
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k8s-worker-01
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: deskbird-api-logs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+
+  volumeMode: Filesystem
+
+  storageClassName: local-storage
+
+  volumeName: deskbird-api-logs-pv
+
+  resources:
+    requests:
+      storage: 5Gi

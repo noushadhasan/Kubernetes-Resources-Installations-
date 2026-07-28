@@ -1,0 +1,5 @@
+#Run Below commands on Worker-node-01
+
+mkdir -p /var/lib/deskbird-api/logs
+chown root:root /var/lib/deskbird-api/logs
+chmod 755 /var/lib/deskbird-api/logs
